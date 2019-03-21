@@ -3,35 +3,45 @@ package ru.lavifae.homework1;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-/*
-Требуется написать Android приложение с двумя фрагментами и одной Activity.
-
-Первый фрагмент должен отображать список чисел от 1 до 100 в сетке с 3 столбцами
-# и одну кнопку, по нажатию на которую должен добавить элемент в конце списка.
-#Высота и ширина View,отображающей число, должна быть не меньше 48dp по каждой стороне.
-#Чётные числа должны быть написаны красным шрифтом, нечетные - синим.
-
-#При клике на любое число должен открываться второй фрагмент, заменяя собой первый,
-# и отображать выбранное число крупным шрифтом и тем же цветом, что и в списке.
-# По кнопке back должен производиться возврат в список чисел.
-
-#Необходимо обеспечить, чтобы в портретной ориентации было 3 столбца в сетке, а в ландшафтной - 4
-
-# бесячее обновление
- */
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private ArrayList<String> mStrings;
+    private static final String STRINGS_KEY = "savedStrings";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListFragment listFragment = new ListFragment();
+        if (savedInstanceState == null) {
+            mStrings = new ArrayList<>();
+            fillList(mStrings);
+        }
+        else {
+            mStrings = savedInstanceState.getStringArrayList(STRINGS_KEY);
+        }
+
+
+        ListFragment listFragment = ListFragment.newInstance(mStrings);
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.activity_main_frame, listFragment)
                 .commit();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArrayList(STRINGS_KEY, mStrings);
+    }
+
+
+    void fillList(List<String> toFill) {
+        for (int i = 1; i <= 100; i++) {
+            toFill.add(i + "");
+        }
     }
 }

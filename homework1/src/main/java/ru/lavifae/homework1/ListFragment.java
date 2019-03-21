@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class ListFragment extends Fragment {
+    private static final String ARGS_STRINGS = "args:strings";
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
@@ -27,24 +27,29 @@ public class ListFragment extends Fragment {
         final RecyclerView recyclerView;
         recyclerView = view.findViewById(R.id.my_list);
 
-        // tries to fix orientation task
+        // tries for orientation task
         final int columns = getResources().getInteger(R.integer.numOfCols);
         GridLayoutManager layout = new GridLayoutManager(getContext(), columns);
         recyclerView.setLayoutManager(layout);
 
-        // first initialisation of data array
-        ArrayList<String> strings = new ArrayList<>();
-        fillList(strings);
+        // restore or get strings
+        ArrayList<String> strings;
+        if (getArguments() != null) {
+            strings = getArguments().getStringArrayList(ARGS_STRINGS);
+        }
+        else {
+            strings = new ArrayList<>();
+        }
 
-        final ListFragment.MyAdapter adapter = new ListFragment.MyAdapter(strings);
-        recyclerView.setAdapter(adapter);
+        final MyAdapter myAdapter = new MyAdapter(strings);
+        recyclerView.setAdapter(myAdapter);
 
         Button button = view.findViewById(R.id.add_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nextNum = (adapter.getItemCount() + 1) + "";
-                adapter.addItem(nextNum);
+                String nextNum = (myAdapter.getItemCount() + 1) + "";
+                myAdapter.addItem(nextNum);
             }
         });
 
@@ -52,10 +57,14 @@ public class ListFragment extends Fragment {
 
     }
 
-    void fillList(List<String> toFill) {
-        for (int i = 1; i <= 100; i++) {
-            toFill.add(i + "");
-        }
+    public static ListFragment newInstance(ArrayList<String> strings) {
+        ListFragment listFragment = new ListFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList(ARGS_STRINGS, strings);
+        listFragment.setArguments(bundle);
+
+        return listFragment;
     }
 
 
@@ -70,9 +79,9 @@ public class ListFragment extends Fragment {
     }
 
     class MyAdapter extends RecyclerView.Adapter<ListFragment.MyViewHolder> {
-        private List<String> mData;
+        private ArrayList<String> mData;
 
-        MyAdapter(List<String> data) {
+        MyAdapter(ArrayList<String> data) {
             mData = data;
         }
 
@@ -81,7 +90,6 @@ public class ListFragment extends Fragment {
         public ListFragment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
             View v = inflater.inflate(R.layout.list_element, viewGroup, false);
-            Log.d("TAG", "onCreateViewHolder for element type " + i + "");
             return new ListFragment.MyViewHolder(v);
         }
 
@@ -98,7 +106,6 @@ public class ListFragment extends Fragment {
             else {
                 myViewHolder.mTextView.setTextColor(getResources().getColor(R.color.colorEven));
             }
-            Log.d("TAG", "binding element at position " + i);
 
             myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -117,7 +124,6 @@ public class ListFragment extends Fragment {
 
         }
 
-
         @Override
         public int getItemCount() {
             return mData.size();
@@ -125,7 +131,7 @@ public class ListFragment extends Fragment {
 
         void addItem(String newItem){
             mData.add(newItem);
-            notifyItemInserted(mData.size());
+            notifyItemInserted(getItemCount());
         }
     }
 }

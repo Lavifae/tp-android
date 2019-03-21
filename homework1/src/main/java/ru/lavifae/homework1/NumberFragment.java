@@ -33,6 +33,7 @@ public class NumberFragment extends Fragment {
 
     public static NumberFragment newInstance(CharSequence number, int color) {
         NumberFragment numberFragment = new NumberFragment();
+
         Bundle bundle = new Bundle();
         bundle.putCharSequence(ARGS_NUMBER, number);
         bundle.putInt(ARGS_COLOR, color);
