@@ -3,6 +3,7 @@ package ru.lavifae.homework1;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,9 @@ public class NumberFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_number,
                 container, false);
+
+        // inform activity, which fragment were last hero
+        ((MainActivity) getActivity()).setCurrentFragment("NumberFragment");
 
         TextView textView = view.findViewById(R.id.selected_number);
 
@@ -41,4 +45,5 @@ public class NumberFragment extends Fragment {
 
         return numberFragment;
     }
+
 }
