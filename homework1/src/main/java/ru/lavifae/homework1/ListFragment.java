@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.Objects;
 
 public class ListFragment extends Fragment {
     private static final String ARGS_STRINGS = "args:strings";
+    private String mFragmentState;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -41,6 +43,16 @@ public class ListFragment extends Fragment {
             strings = new ArrayList<>();
         }
 
+        // restore state
+        if (savedInstanceState != null) {
+            mFragmentState = savedInstanceState.getString("key");
+        }
+        else {
+            mFragmentState = "init";
+        }
+
+        toLog(mFragmentState);
+
         final MyAdapter myAdapter = new MyAdapter(strings);
         recyclerView.setAdapter(myAdapter);
 
@@ -50,6 +62,8 @@ public class ListFragment extends Fragment {
             public void onClick(View view) {
                 String nextNum = (myAdapter.getItemCount() + 1) + "";
                 myAdapter.addItem(nextNum);
+                mFragmentState = "clicked";
+                toLog(mFragmentState);
             }
         });
 
@@ -57,13 +71,23 @@ public class ListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("key", mFragmentState);
+    }
+
+    void toLog(String currentState) {
+        Log.d("D", "Changed fragment state " + currentState);
+    }
+
 
     public static ListFragment newInstance(ArrayList<String> strings) {
-        ListFragment listFragment = new ListFragment();
-
         Bundle bundle = new Bundle();
         bundle.putStringArrayList(ARGS_STRINGS, strings);
+        ListFragment listFragment = new ListFragment();
         listFragment.setArguments(bundle);
+        Log.d("D","created list with fragments");
 
         return listFragment;
     }

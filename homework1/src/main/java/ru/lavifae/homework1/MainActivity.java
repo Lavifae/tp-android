@@ -27,13 +27,20 @@ public class MainActivity extends AppCompatActivity {
             mCurrentFragment = savedInstanceState.getString(CURRENT_FRAGMENT_KEY);
         }
 
-
         if (mCurrentFragment == null || mCurrentFragment.equals("list")) {
-            ListFragment listFragment = ListFragment.newInstance(mStrings);
+            ListFragment listFragment;
+
+            // troubleshooting for helly twicecalling oncreate
+            if (getSupportFragmentManager().findFragmentByTag("list") == null) {
+                listFragment = ListFragment.newInstance(mStrings);
+            }
+            else {
+                listFragment =  (ListFragment) getSupportFragmentManager().findFragmentByTag("list");
+            }
 
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.activity_main_frame, listFragment, "list")
+                    .replace(R.id.activity_main_frame, Objects.requireNonNull(listFragment), "list")
                     .commit();
         }
     }
