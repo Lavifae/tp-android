@@ -1,7 +1,10 @@
 package ru.lavifae.homework1;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if (mCurrentFragment == null || mCurrentFragment.equals("ListFragment")) {
+        if (mCurrentFragment == null || mCurrentFragment.equals("list")) {
             ListFragment listFragment = ListFragment.newInstance(mStrings);
 
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.activity_main_frame, listFragment)
+                    .replace(R.id.activity_main_frame, listFragment, "list")
                     .commit();
         }
     }
@@ -52,7 +55,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setCurrentFragment(String fragmentName) {
-        mCurrentFragment = fragmentName;
+    @Override
+    protected void onPause() {
+        // check which fragment were the last hero
+        if (getSupportFragmentManager().findFragmentByTag("list").isVisible())
+            mCurrentFragment = "list";
+        else {
+            mCurrentFragment = "number";
+        }
+        super.onPause();
     }
 }

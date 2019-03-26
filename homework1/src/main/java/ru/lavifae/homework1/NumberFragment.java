@@ -21,9 +21,6 @@ public class NumberFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_number,
                 container, false);
 
-        // inform activity, which fragment were last hero
-        ((MainActivity) Objects.requireNonNull(getActivity())).setCurrentFragment("NumberFragment");
-
         TextView textView = view.findViewById(R.id.selected_number);
 
         if  (getArguments() != null) {
