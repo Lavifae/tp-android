@@ -2,7 +2,6 @@ package ru.lavifae.homework1;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if (mCurrentFragment == null || mCurrentFragment == "ListFragment") {
+        if (mCurrentFragment == null || mCurrentFragment.equals("ListFragment")) {
             ListFragment listFragment = ListFragment.newInstance(mStrings);
 
             getSupportFragmentManager()

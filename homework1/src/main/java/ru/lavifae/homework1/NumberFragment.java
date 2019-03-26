@@ -3,11 +3,12 @@ package ru.lavifae.homework1;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.Objects;
 
 public class NumberFragment extends Fragment {
     private static final String ARGS_NUMBER = "args:number";
@@ -21,7 +22,7 @@ public class NumberFragment extends Fragment {
                 container, false);
 
         // inform activity, which fragment were last hero
-        ((MainActivity) getActivity()).setCurrentFragment("NumberFragment");
+        ((MainActivity) Objects.requireNonNull(getActivity())).setCurrentFragment("NumberFragment");
 
         TextView textView = view.findViewById(R.id.selected_number);
 

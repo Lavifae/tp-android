@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,7 @@ public class ListFragment extends Fragment {
                 container, false);
 
         // inform activity, which fragment were last hero
-        ((MainActivity) getActivity()).setCurrentFragment("ListFragment");
+        ((MainActivity) Objects.requireNonNull(getActivity())).setCurrentFragment("ListFragment");
 
         final RecyclerView recyclerView;
         recyclerView = view.findViewById(R.id.my_list);
