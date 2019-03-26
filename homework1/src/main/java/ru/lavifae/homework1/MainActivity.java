@@ -1,13 +1,11 @@
 package ru.lavifae.homework1;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mStrings;
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         // check which fragment were the last hero
-        if (getSupportFragmentManager().findFragmentByTag("list").isVisible())
+        if (Objects.requireNonNull(getSupportFragmentManager().findFragmentByTag("list")).isVisible())
             mCurrentFragment = "list";
         else {
             mCurrentFragment = "number";

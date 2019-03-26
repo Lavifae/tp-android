@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Objects;
-
 public class NumberFragment extends Fragment {
     private static final String ARGS_NUMBER = "args:number";
     private static final String ARGS_COLOR = "args:color";
